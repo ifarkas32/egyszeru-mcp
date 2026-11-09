@@ -42,7 +42,10 @@ def get_weather() -> str:
     response.raise_for_status()
     print(f"ddd")
     current = response.json()["current_condition"][0]
-    print(f"eee")
+    print(f"eee1:{response.json()}")
+    print(f"eee2:{len(response.json()["current_condition"])}")
+    print(f"eee3:{response.json()["current_condition"][0]}")
+    print(f"eee4:{response.json()["current_condition"][0].keys()}")
     return city
 
 # @mcp.tool()
