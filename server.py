@@ -5,15 +5,11 @@ Helyi teszt:  python server.py   ->  http://localhost:8000/mcp
 import os
 from urllib.parse import quote
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server import MCPServer
 import requests
 
 # A Render a PORT környezeti változóban adja meg a portot, és 0.0.0.0-n kell hallgatni
-mcp = FastMCP(
-    "egyszeru-mcp",
-    host="0.0.0.0",
-    port=int(os.environ.get("PORT", 8000)),
-)
+mcp = MCPServer("egyszeru-mcp")
 
 @mcp.tool()
 def verzio() -> int:
@@ -32,7 +28,7 @@ def osszead(a: float, b: float) -> float:
     return a + b
 
 @mcp.tool()
-def get_weather(city: str)-> dict[str, str]:
+def get_weather(city: str) -> dict[str, str]:
     url = f"https://wttr.in/{quote(city)}?format=j1"
     response = requests.get(url, timeout=10)
     response.raise_for_status()
@@ -75,7 +71,11 @@ if __name__ == "__main__":
     import sys, traceback
     print("Indul a szerver...", flush=True)
     try:
-        mcp.run(transport="streamable-http")
+        mcp.run(
+            transport="streamable-http",
+            host="0.0.0.0",
+            port=int(os.environ.get("PORT", 8000)),
+        )
     except BaseException:
         traceback.print_exc()
         sys.stdout.flush()
