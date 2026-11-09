@@ -28,6 +28,12 @@ async def run_tests():
         assert "koszon" in names, "Hiányzik a koszon eszköz"
         assert "osszead" in names, "Hiányzik az osszead eszköz"
         assert "verzio" in names, "Hiányzik a verzio eszköz"
+        assert "matrix_check_direction" in names, (
+            "Hiányzik a matrix_check_direction eszköz"
+        )
+        assert "matrix_start_point" in names, "Hiányzik a matrix_start_point eszköz"
+        assert "matrix_directions" in names, "Hiányzik a matrix_directions eszköz"
+        assert "matrix_cellNames" in names, "Hiányzik a matrix_cellNames eszköz"
 
         # 3) verzio eszköz hívása
         res = await client.call_tool("verzio", {})
@@ -47,7 +53,55 @@ async def run_tests():
         print(f"[OK] osszead(2, 3) -> {out}")
         assert float(out) == 5.0, f"Váratlan válasz: {out}"
 
-        # 6) get_weather eszköz hívása
+        # 6) matrix_check_direction eszköz hívása
+        res = await client.call_tool(
+            "matrix_check_direction",
+            {"row": 1, "col": 0, "direction": "R"},
+        )
+        out = text_of(res)
+        print(f"[OK] matrix_check_direction -> {out}")
+        assert out == "start", f"Váratlan irányeredmény: {out}"
+
+        # 7) matrix_start_point eszköz hívása
+        res = await client.call_tool("matrix_start_point", {})
+        out = text_of(res)
+        start_point = json.loads(out)
+        print(f"[OK] matrix_start_point -> {start_point}")
+        assert start_point == {"row": 1, "col": 1}, (
+            f"Váratlan kezdőpont: {start_point}"
+        )
+
+        # 8) matrix_directions eszköz hívása
+        res = await client.call_tool("matrix_directions", {})
+        out = text_of(res)
+        directions = json.loads(out)
+        expected_directions = {
+            "U": [-1, 0],
+            "D": [1, 0],
+            "L": [0, -1],
+            "R": [0, 1],
+        }
+        print(f"[OK] matrix_directions -> {directions}")
+        assert directions == expected_directions, (
+            f"Váratlan irányok: {directions}"
+        )
+
+        # 9) matrix_cellNames eszköz hívása
+        res = await client.call_tool("matrix_cellNames", {})
+        out = text_of(res)
+        cell_names = json.loads(out)
+        expected_cell_names = {
+            "0": "passageway",
+            "1": "wall",
+            "2": "start",
+            "3": "end",
+        }
+        print(f"[OK] matrix_cellNames -> {cell_names}")
+        assert cell_names == expected_cell_names, (
+            f"Váratlan cellanevek: {cell_names}"
+        )
+
+        # 10) get_weather eszköz hívása
         res = await client.call_tool("get_weather", {"city": "Budapest"})
         assert not res.is_error, f"A get_weather hívás sikertelen: {text_of(res)}"
         out = text_of(res)
