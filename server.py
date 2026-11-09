@@ -27,5 +27,11 @@ def osszead(a: float, b: float) -> float:
 
 
 if __name__ == "__main__":
-    # Streamable HTTP: a végpont az /mcp útvonalon érhető el
-    mcp.run(transport="streamable-http")
+    import sys, traceback
+    print("Indul a szerver...", flush=True)
+    try:
+        mcp.run(transport="streamable-http")
+    except BaseException:
+        traceback.print_exc()
+        sys.stdout.flush()
+        sys.exit(1)
