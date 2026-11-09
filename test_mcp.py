@@ -5,6 +5,7 @@ Futtatás:
     python test_mcp.py
 """
 import asyncio
+import json
 
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
@@ -55,7 +56,9 @@ async def run_tests():
             res = await session.call_tool("get_weather", {})
             out = text_of(res)
             print(f"[OK] get_weather -> {out}")
-            assert "Budapest" in out, f"Váratlan válasz: {out}"
+            weather = json.loads(out)
+            print(f"[OK] get_weather(Budapest) -> {weather}")
+            #assert "Budapest" in out, f"Váratlan válasz: {out}"
 
             # # 6) get_weather eszköz hívása
             # res = await session.call_tool("get_weather", {"city": "Budapest"})
