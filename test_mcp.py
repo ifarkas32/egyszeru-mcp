@@ -50,6 +50,13 @@ async def run_tests():
             print(f"[OK] osszead(2, 3) -> {out}")
             assert float(out) == 5.0, f"Váratlan válasz: {out}"
 
+
+            # 6) get_weather eszköz hívása
+            res = await session.call_tool("get_weather", {})
+            out = text_of(res)
+            print(f"[OK] get_weather -> {out}")
+            assert "Budapest" in out, f"Váratlan válasz: {out}"
+
             # # 6) get_weather eszköz hívása
             # res = await session.call_tool("get_weather", {"city": "Budapest"})
             # out = text_of(res)
