@@ -51,25 +51,18 @@ async def run_tests():
             print(f"[OK] osszead(2, 3) -> {out}")
             assert float(out) == 5.0, f"Váratlan válasz: {out}"
 
-
             # 6) get_weather eszköz hívása
-            res = await session.call_tool("get_weather", {})
+            res = await session.call_tool("get_weather", {"city": "Budapest"})
+            assert not res.isError, f"A get_weather hívás sikertelen: {text_of(res)}"
             out = text_of(res)
-            print(f"[OK] get_weather -> {out}")
             weather = json.loads(out)
             print(f"[OK] get_weather(Budapest) -> {weather}")
-            #assert "Budapest" in out, f"Váratlan válasz: {out}"
-
-            # # 6) get_weather eszköz hívása
-            # res = await session.call_tool("get_weather", {"city": "Budapest"})
-            # out = text_of(res)
-            # weather = json.loads(out)
-            # print(f"[OK] get_weather(Budapest) -> {weather}")
-            # assert weather["city"] == "Budapest", f"Váratlan város: {weather}"
-            # assert weather["temperature_celsius"], f"Hiányzó hőmérséklet: {weather}"
-            # assert weather["humidity"], f"Hiányzó páratartalom: {weather}"
-            # assert weather["condition"], f"Hiányzó időjárás: {weather}"
-
+            assert isinstance(weather, dict), f"Váratlan válaszformátum: {weather}"
+            assert weather["city"] == "Budapest", f"Váratlan város: {weather}"
+            for field in ("temperature_celsius", "humidity", "condition"):
+                assert isinstance(weather[field], str) and weather[field], (
+                    f"Hiányzó vagy hibás {field}: {weather}"
+                )
     print("\nMinden teszt sikeres.")
 
 

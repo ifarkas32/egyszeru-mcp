@@ -32,15 +32,10 @@ def osszead(a: float, b: float) -> float:
     return a + b
 
 @mcp.tool()
-def get_weather()-> dict[str, str]:
-    city = "Budapest"
-    print(f"aaa")
+def get_weather(city: str)-> dict[str, str]:
     url = f"https://wttr.in/{quote(city)}?format=j1"
-    print(f"bbb")
     response = requests.get(url, timeout=10)
-    print(f"ccc")
     response.raise_for_status()
-    print(f"ddd")
     current = response.json()["current_condition"][0]
     #print(f"eee1:{response.json()}")
     #print(f"eee2:{len(response.json()["current_condition"])}")
