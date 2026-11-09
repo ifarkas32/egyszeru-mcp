@@ -35,7 +35,7 @@ def get_weather(city: str) -> dict[str, str]:
     response = requests.get(url, timeout=10)
     response.raise_for_status()
 
-    # current = response.json()["current_condition"][0]
+    current = response.json()["current_condition"][0]
     return {
         "city": city,
         "temperature_celsius": "20",
