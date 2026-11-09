@@ -29,7 +29,8 @@ def osszead(a: float, b: float) -> float:
 
 
 @mcp.tool()
-def get_weather(city: str) -> dict[str, str]:
+def get_weather(city: str) -> str:
+#def get_weather(city: str) -> dict[str, str]:
     """Get the current temperature, humidity, and weather condition for a city."""
     # url = f"https://wttr.in/{quote(city)}?format=j1"
     # response = requests.get(url, timeout=10)
@@ -37,12 +38,13 @@ def get_weather(city: str) -> dict[str, str]:
 
     # current = response.json()["current_condition"][0]
     print(f"Get weather for {city} (simulated response)")   
-    return {
-        "city": city,
-        "temperature_celsius": "20",
-        "humidity": "60",
-        "condition": "Sunny",
-    }
+    return "aaa"
+    # return {
+    #     "city": city,
+    #     "temperature_celsius": "20",
+    #     "humidity": "60",
+    #     "condition": "Sunny",
+    # }
 
 
 
