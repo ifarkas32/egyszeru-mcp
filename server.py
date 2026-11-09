@@ -15,6 +15,10 @@ mcp = FastMCP(
     port=int(os.environ.get("PORT", 8000)),
 )
 
+@mcp.tool()
+def verzio() -> int:
+    """Visszaadja a szerver verziószámát."""
+    return 1
 
 @mcp.tool()
 def koszon(nev: str) -> str:
@@ -28,25 +32,25 @@ def osszead(a: float, b: float) -> float:
     return a + b
 
 
-@mcp.tool()
-def get_weather(city: str) -> dict[str, str]:
-    """Get the current temperature, humidity, and weather condition for a city."""
-    print(f"1Get weather for {city}...")
-    url = f"https://wttr.in/{quote(city)}?format=j1"
-    print(f"2Get weather for {city}...")
-    response = requests.get(url, timeout=10)
-    print(f"3Get weather for {city}...")
-    response.raise_for_status()
-    print(f"4Get weather for {city}...")
+# @mcp.tool()
+# def get_weather(city: str) -> dict[str, str]:
+#     """Get the current temperature, humidity, and weather condition for a city."""
+#     print(f"1Get weather for {city}...")
+#     url = f"https://wttr.in/{quote(city)}?format=j1"
+#     print(f"2Get weather for {city}...")
+#     response = requests.get(url, timeout=10)
+#     print(f"3Get weather for {city}...")
+#     response.raise_for_status()
+#     print(f"4Get weather for {city}...")
 
-    current = response.json()["current_condition"][0]
-    print(f"5Get weather for {city}... {response.json()}")
-    return {
-        "city": city,
-        "temperature_celsius": current["temp_C"],
-        "humidity": current["humidity"],
-        "condition": current["weatherDesc"][0]["value"],
-    }
+#     current = response.json()["current_condition"][0]
+#     print(f"5Get weather for {city}... {response.json()}")
+#     return {
+#         "city": city,
+#         "temperature_celsius": current["temp_C"],
+#         "humidity": current["humidity"],
+#         "condition": current["weatherDesc"][0]["value"],
+#     }
 
 
 
