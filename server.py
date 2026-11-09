@@ -5,6 +5,7 @@ Helyi teszt:  python server.py   ->  http://localhost:8000/mcp
 import os
 
 from mcp.server.fastmcp import FastMCP
+import requests
 
 # A Render a PORT környezeti változóban adja meg a portot, és 0.0.0.0-n kell hallgatni
 mcp = FastMCP(
@@ -24,6 +25,23 @@ def koszon(nev: str) -> str:
 def osszead(a: float, b: float) -> float:
     """Összead két számot."""
     return a + b
+
+
+@mcp.tool()
+def get_weather(city: str) -> dict[str, str]:
+    """Get the current temperature, humidity, and weather condition for a city."""
+    url = f"https://wttr.in/{quote(city)}?format=j1"
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+
+    current = response.json()["current_condition"][0]
+    return {
+        "city": city,
+        "temperature_celsius": current["temp_C"],
+        "humidity": current["humidity"],
+        "condition": current["weatherDesc"][0]["value"],
+    }
+
 
 
 if __name__ == "__main__":
